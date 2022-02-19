@@ -1,0 +1,62 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #F5F7FB;
+    color: #293264;
+}
+
+.debug {
+    border: 1px solid magenta;
+}
+
+.quizzical-app {
+    max-width: 530px;
+}
+
+ul {
+    display: flex;
+    padding: 0;
+    gap: 1em;
+}
+
+li {
+    list-style: none;
+}
+
+button {
+    font-family: inherit;
+    color: #293264;
+    background: #F5F7FB;
+    white-space: nowrap;
+    border: 2px solid #293264;
+    border-radius: 10px;
+    padding: .25em 1em;
+    font-size: 1rem;
+    transform: scale(1);
+    transition: .2s;
+    transition-property: color, background, transform;
+    cursor: pointer;
+}
+
+button:hover, 
+button:active {
+    color: #F5F7FB;
+    background: #293264;
+    transform: scale(1.1);
+}
+
+h2 {
+    margin: 0;
+}
+
+hr {
+    margin: 2em 0;
+}
