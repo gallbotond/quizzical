@@ -4,6 +4,7 @@ import Question from './Question'
 
 export default function Quizzical() {
     const [quizzState, setQuizzState] = React.useState([])
+    const [chosen, setChosen] = React.useState(null)
 
     async function getQuestions() {
         let response = await fetch("https://opentdb.com/api.php?amount=5")
@@ -24,7 +25,7 @@ export default function Quizzical() {
                 answers: answersArray,
                 question: item.question,
                 correct: item.correct_answer,
-                chosen: 0
+                chosen: null
             })
         })
 
@@ -35,8 +36,20 @@ export default function Quizzical() {
         getQuestions().then(data => setQuizzState(prepareQuestions(data.results)))
     }, [])
 
-    function answerClicked(id) {
-        console.log(id)
+    // TODO: need to find a way to change parent state from child component
+    function setAnswer(id, answerID) {
+        let newObject = quizzState[id];
+        newObject.chosen = answerID
+        setQuizzState(prev => [
+            ...prev, 
+            
+        ])
+    }
+
+    function answerClicked(id, answer) {
+        console.log(id, answer)
+        setAnswer(id, answer)
+        console.log(quizzState)
     }
 
     return (
@@ -47,7 +60,7 @@ export default function Quizzical() {
                                                 answers={item.answers} 
                                                 answer={item.correct} 
                                                 selfID={index}
-                                                clickHandler={(index) => answerClicked(index)}
+                                                clickHandler={() => answerClicked(index, item.chosen)}
                                             />)}
         </div>
     )
