@@ -4,6 +4,7 @@ import Question from './Question'
 
 export default function Quizzical() {
     const [quizzState, setQuizzState] = React.useState([])
+    const [newPool, setNewPool] = React.useState(0)
 
     async function getQuestions() {
         let response = await fetch("https://opentdb.com/api.php?amount=5")
@@ -33,32 +34,32 @@ export default function Quizzical() {
 
     React.useEffect(() => {
         getQuestions().then(data => setQuizzState(prepareQuestions(data.results)))
-    }, [])
+        console.log(quizzState)
+    }, [newPool])
 
     // TODO: need to find a way to change parent state from child component
-    function setAnswer(id, answerID) {
+    function handleAnswer(id, answerID) {
         let obj = quizzState[1]
-        console.log(obj)
         obj.chosen = answerID
-        setQuizzState(prev => prev.splice(id, 1, obj))
-    }
-
-    function answerClicked(id, answer) {
-        console.log(id, answer)
+        let before = quizzState.slice(0, id)
+        let after = quizzState.slice(id + 1, quizzState.length)
+        console.log(id, answerID, before, obj, after, quizzState)
+        setQuizzState([...before, obj, ...after])
     }
 
     return (
-        <div className="quizzical-app">
-            {/* {quizzState.map((item, index) => <Question 
-                                                key={index} 
-                                                question={item.question} 
-                                                answers={item.answers} 
-                                                answer={item.correct} 
-                                                selfID={index}
-                                                clickHandler={() => answerClicked(index, item.chosen)}
-                                            />)} */}
-
-            <button onClick={setAnswer(1, 1)} />
-        </div>
+        <>
+            <div className="quizzical-app">
+                {quizzState.map((item, index) => <Question 
+                                                    key={index} 
+                                                    question={item.question} 
+                                                    answers={item.answers} 
+                                                    answer={item.correct} 
+                                                    selfID={index}
+                                                    clickHandler={() => handleAnswer(index, item.chosen)}
+                                                />)}
+            </div>
+            <button onClick={() => setNewPool(prev => prev + 1)}>New pool</button>
+        </>
     )
 }
