@@ -41,14 +41,17 @@ export default function Quizzical() {
 
     return (
         <div className="quizzical-app">
-            {quizzState.map((item, index) => <Question 
+            {/* {quizzState.map((item, index) => <Question 
                                                 key={index} 
                                                 question={item.question} 
                                                 answers={item.answers} 
                                                 answer={item.correct} 
                                                 selfID={index}
                                                 clickHandler={(index) => answerClicked(index)}
-                                            />)}
+                                            />)} */
+            for(let i = 0; i < quizzState.length; i++) {
+                console.log(i)
+            }}
         </div>
     )
 }
