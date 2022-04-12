@@ -4,6 +4,7 @@ import Question from './Question'
 
 export default function Quizzical() {
     const [quizzState, setQuizzState] = React.useState([])
+    const [newPool, setNewPool] = React.useState(0)
 
     async function getQuestions() {
         let response = await fetch("https://opentdb.com/api.php?amount=5")
@@ -24,7 +25,7 @@ export default function Quizzical() {
                 answers: answersArray,
                 question: item.question,
                 correct: item.correct_answer,
-                chosen: 0
+                chosen: null
             })
         })
 
@@ -33,25 +34,32 @@ export default function Quizzical() {
 
     React.useEffect(() => {
         getQuestions().then(data => setQuizzState(prepareQuestions(data.results)))
-    }, [])
+        console.log(quizzState)
+    }, [newPool])
 
-    function answerClicked(id) {
-        console.log(id)
+    // TODO: need to find a way to change parent state from child component
+    function handleAnswer(id, answerID) {
+        let obj = quizzState[1]
+        obj.chosen = answerID
+        let before = quizzState.slice(0, id)
+        let after = quizzState.slice(id + 1, quizzState.length)
+        console.log(id, answerID, before, obj, after, quizzState)
+        setQuizzState([...before, obj, ...after])
     }
 
     return (
-        <div className="quizzical-app">
-            {/* {quizzState.map((item, index) => <Question 
-                                                key={index} 
-                                                question={item.question} 
-                                                answers={item.answers} 
-                                                answer={item.correct} 
-                                                selfID={index}
-                                                clickHandler={(index) => answerClicked(index)}
-                                            />)} */
-            for(let i = 0; i < quizzState.length; i++) {
-                console.log(i)
-            }}
-        </div>
+        <>
+            <div className="quizzical-app">
+                {quizzState.map((item, index) => <Question 
+                                                    key={index} 
+                                                    question={item.question} 
+                                                    answers={item.answers} 
+                                                    answer={item.correct} 
+                                                    selfID={index}
+                                                    clickHandler={() => handleAnswer(index, item.chosen)}
+                                                />)}
+            </div>
+            <button onClick={() => setNewPool(prev => prev + 1)}>New pool</button>
+        </>
     )
 }
